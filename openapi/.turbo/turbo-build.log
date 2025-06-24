@@ -1,0 +1,5 @@
+
+
+> sf-openapi-docs@9.0.12 build /Users/wangyuan/Documents/work/test/fumadocs/packages/openapi
+> tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json
+
