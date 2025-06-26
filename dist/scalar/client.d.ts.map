@@ -1,0 +1,1 @@
+{"version":3,"file":"client.d.ts","sourceRoot":"","sources":["../../src/scalar/client.tsx"],"names":[],"mappings":"AAYA,MAAM,CAAC,OAAO,UAAU,gBAAgB,CAAC,EACvC,IAAI,EACJ,MAAM,EACN,IAAI,GACL,EAAE;IACD,IAAI,EAAE,MAAM,CAAC;IACb,IAAI,EAAE,MAAM,CAAC;IACb,MAAM,EAAE,MAAM,CAAC;CAChB,2CA+BA"}

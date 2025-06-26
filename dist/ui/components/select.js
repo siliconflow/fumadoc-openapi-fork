@@ -1,0 +1,24 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import * as SelectPrimitive from '@radix-ui/react-select';
+import { Check, ChevronDown, ChevronUp } from '../../icons.js';
+import { forwardRef } from 'react';
+import { cn } from 'fumadocs-ui/utils/cn';
+const Select = SelectPrimitive.Root;
+const SelectGroup = SelectPrimitive.Group;
+const SelectValue = SelectPrimitive.Value;
+const SelectTrigger = forwardRef(({ className, children, ...props }, ref) => (_jsxs(SelectPrimitive.Trigger, { ref: ref, className: cn('flex items-center w-full rounded-md border p-2 gap-2 text-start text-[13px] text-fd-secondary-foreground bg-fd-secondary hover:bg-fd-accent focus:outline-none focus:ring focus:ring-fd-ring disabled:cursor-not-allowed disabled:opacity-50', className), ...props, children: [children, _jsx(SelectPrimitive.Icon, { asChild: true, children: _jsx(ChevronDown, { className: "ms-auto size-3.5 text-fd-muted-foreground" }) })] })));
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
+const SelectScrollUpButton = forwardRef(({ className, ...props }, ref) => (_jsx(SelectPrimitive.ScrollUpButton, { ref: ref, className: cn('flex items-center justify-center py-1', className), ...props, children: _jsx(ChevronUp, { className: "size-4" }) })));
+SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
+const SelectScrollDownButton = forwardRef(({ className, ...props }, ref) => (_jsx(SelectPrimitive.ScrollDownButton, { ref: ref, className: cn('flex items-center justify-center py-1', className), ...props, children: _jsx(ChevronDown, { className: "size-4" }) })));
+SelectScrollDownButton.displayName =
+    SelectPrimitive.ScrollDownButton.displayName;
+const SelectContent = forwardRef(({ className, children, position, ...props }, ref) => (_jsx(SelectPrimitive.Portal, { children: _jsxs(SelectPrimitive.Content, { ref: ref, className: cn('z-50 overflow-hidden rounded-lg border bg-fd-popover text-fd-popover-foreground shadow-md', className), position: position, ...props, children: [_jsx(SelectScrollUpButton, {}), _jsx(SelectPrimitive.Viewport, { className: "p-1", children: children }), _jsx(SelectScrollDownButton, {})] }) })));
+SelectContent.displayName = SelectPrimitive.Content.displayName;
+const SelectLabel = forwardRef(({ className, ...props }, ref) => (_jsx(SelectPrimitive.Label, { ref: ref, className: cn('py-1.5 pe-2 ps-6 text-sm font-semibold', className), ...props })));
+SelectLabel.displayName = SelectPrimitive.Label.displayName;
+const SelectItem = forwardRef(({ className, children, ...props }, ref) => (_jsxs(SelectPrimitive.Item, { ref: ref, className: cn('flex select-none flex-row items-center rounded-md py-1.5 px-2 text-[13px] outline-none focus:bg-fd-accent focus:text-fd-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50', className), ...props, children: [_jsx(SelectPrimitive.ItemText, { children: children }), _jsx(SelectPrimitive.ItemIndicator, { className: "ms-auto", children: _jsx(Check, { className: "size-3.5 text-fd-primary" }) })] })));
+SelectItem.displayName = SelectPrimitive.Item.displayName;
+const SelectSeparator = forwardRef(({ className, ...props }, ref) => (_jsx(SelectPrimitive.Separator, { ref: ref, className: cn('my-1 h-px bg-fd-muted', className), ...props })));
+SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
+export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectSeparator, SelectScrollUpButton, SelectScrollDownButton, };

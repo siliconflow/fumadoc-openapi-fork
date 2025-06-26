@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/scalar/index.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,iBAAiB,EAAE,aAAa,EAAE,MAAM,SAAS,CAAC;AAKhE,wBAAgB,aAAa,CAAC,EAC5B,IAAI,EACJ,MAAM,EACN,GAAG,GACJ,EAAE;IACD,IAAI,EAAE,MAAM,CAAC;IACb,MAAM,EAAE,iBAAiB,CAAC;IAC1B,GAAG,EAAE,aAAa,CAAC;CACpB,2CAIA"}
