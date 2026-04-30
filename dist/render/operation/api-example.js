@@ -68,7 +68,7 @@ export function getAPIExamples(path, method, ctx) {
 export async function APIExample({ method, examples, ctx, }) {
     const renderer = ctx.renderer;
     const generators = dedupe([
-        ...defaultSamples,
+        // ...defaultSamples,
         ...(ctx.generateCodeSamples ? await ctx.generateCodeSamples(method) : []),
         ...(method['x-codeSamples'] ?? []),
     ]).filter((generator) => generator.source !== false);

@@ -124,7 +124,7 @@ export async function APIExample({
 }) {
   const renderer = ctx.renderer;
   const generators = dedupe([
-    ...defaultSamples,
+    // ...defaultSamples,
     ...(ctx.generateCodeSamples ? await ctx.generateCodeSamples(method) : []),
     ...(method['x-codeSamples'] ?? []),
   ]).filter((generator) => generator.source !== false);
