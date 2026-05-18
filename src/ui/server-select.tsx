@@ -53,7 +53,7 @@ export default function ServerSelect(props: HTMLAttributes<HTMLDivElement>) {
         <DialogHeader>
           <DialogTitle>Server URL</DialogTitle>
           <DialogDescription>
-            The base URL of your API endpoint.
+            The base URL of your API endpoint aaaa.
           </DialogDescription>
         </DialogHeader>
         <Select value={server?.url} onValueChange={setServer}>

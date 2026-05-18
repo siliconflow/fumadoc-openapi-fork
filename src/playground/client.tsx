@@ -45,10 +45,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from 'fumadocs-ui/components/ui/collapsible';
-import { ChevronDown, LoaderCircle } from 'lucide-react';
+import { Check, ChevronDown, Copy, LoaderCircle } from 'lucide-react';
 import type { RequestData } from '@/requests/_shared';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from 'fumadocs-ui/utils/cn';
+import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
 import {
   type FieldInfo,
   SchemaProvider,
@@ -282,6 +283,13 @@ export default function Client({
     testQuery.start(mapInputs(value));
   });
 
+  const [copied, onCopyUrl] = useCopyButton(() => {
+    const url = server
+      ? resolveServerUrl(server.url, server.variables)
+      : '';
+    void navigator.clipboard.writeText(`${url}${route}`);
+  });
+
   return (
     <FormProvider {...form}>
       <SchemaProvider fieldInfoMap={fieldInfoMap} references={references}>
@@ -291,13 +299,28 @@ export default function Client({
             'not-prose flex flex-col rounded-xl border shadow-md overflow-hidden bg-fd-card text-fd-card-foreground',
             rest.className,
           )}
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
         >
           <ServerSelect />
-          <div className="flex flex-row items-center gap-2 text-sm p-3 pb-0">
+          <div className="flex flex-row items-center gap-2 text-sm p-3">
             <MethodLabel>{method}</MethodLabel>
             <Route route={route} className="flex-1" />
             <button
+              type="button"
+              className={cn(
+                buttonVariants({ color: 'primary', size: 'sm' }),
+                'px-3 py-1.5 gap-1.5',
+              )}
+              onClick={onCopyUrl}
+            >
+              {copied ? (
+                <Check className="size-3.5" />
+              ) : (
+                <Copy className="size-3.5" />
+              )}
+              {copied ? 'Copied' : 'Copy'}
+            </button>
+            {/* <button
               type="submit"
               className={cn(
                 buttonVariants({ color: 'primary', size: 'sm' }),
@@ -310,10 +333,10 @@ export default function Client({
               ) : (
                 'Send'
               )}
-            </button>
+            </button> */}
           </div>
 
-          {securities.length > 0 && (
+          {/* {securities.length > 0 && (
             <SecurityTabs
               securities={securities}
               securityId={securityId}
@@ -325,7 +348,7 @@ export default function Client({
             </SecurityTabs>
           )}
           <FormBody body={body} fields={fields} parameters={parameters} />
-          {testQuery.data ? <ResultDisplay data={testQuery.data} /> : null}
+          {testQuery.data ? <ResultDisplay data={testQuery.data} /> : null} */}
         </form>
       </SchemaProvider>
     </FormProvider>

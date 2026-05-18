@@ -10,9 +10,10 @@ import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 import { MethodLabel } from '../ui/components/method-label.js';
 import { useQuery } from '../utils/use-query.js';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger, } from 'fumadocs-ui/components/ui/collapsible';
-import { ChevronDown, LoaderCircle } from '../icons.js';
+import { Check, ChevronDown, Copy } from '../icons.js';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { cn } from 'fumadocs-ui/utils/cn';
+import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
 import { SchemaProvider, useResolvedSchema, } from '../playground/schema.js';
 import { useRequestDataUpdater, useRequestInitialData, } from '../ui/contexts/code-example.js';
 import { useEffectEvent } from 'fumadocs-core/utils/use-effect-event';
@@ -123,7 +124,13 @@ export default function Client({ route, method = 'GET', securities, parameters, 
     const onSubmit = form.handleSubmit((value) => {
         testQuery.start(mapInputs(value));
     });
-    return (_jsx(FormProvider, { ...form, children: _jsx(SchemaProvider, { fieldInfoMap: fieldInfoMap, references: references, children: _jsxs("form", { ...rest, className: cn('not-prose flex flex-col rounded-xl border shadow-md overflow-hidden bg-fd-card text-fd-card-foreground', rest.className), onSubmit: onSubmit, children: [_jsx(ServerSelect, {}), _jsxs("div", { className: "flex flex-row items-center gap-2 text-sm p-3 pb-0", children: [_jsx(MethodLabel, { children: method }), _jsx(Route, { route: route, className: "flex-1" }), _jsx("button", { type: "submit", className: cn(buttonVariants({ color: 'primary', size: 'sm' }), 'px-3 py-1.5'), disabled: testQuery.isLoading, children: testQuery.isLoading ? (_jsx(LoaderCircle, { className: "size-4 animate-spin" })) : ('Send') })] }), securities.length > 0 && (_jsx(SecurityTabs, { securities: securities, securityId: securityId, setSecurityId: setSecurityId, children: inputs.map((input) => (_jsx(Fragment, { children: input.children }, input.fieldName))) })), _jsx(FormBody, { body: body, fields: fields, parameters: parameters }), testQuery.data ? _jsx(ResultDisplay, { data: testQuery.data }) : null] }) }) }));
+    const [copied, onCopyUrl] = useCopyButton(() => {
+        const url = server
+            ? resolveServerUrl(server.url, server.variables)
+            : '';
+        void navigator.clipboard.writeText(`${url}${route}`);
+    });
+    return (_jsx(FormProvider, { ...form, children: _jsx(SchemaProvider, { fieldInfoMap: fieldInfoMap, references: references, children: _jsxs("form", { ...rest, className: cn('not-prose flex flex-col rounded-xl border shadow-md overflow-hidden bg-fd-card text-fd-card-foreground', rest.className), children: [_jsx(ServerSelect, {}), _jsxs("div", { className: "flex flex-row items-center gap-2 text-sm p-3 pb-0", children: [_jsx(MethodLabel, { children: method }), _jsx(Route, { route: route, className: "flex-1" }), _jsxs("button", { type: "button", className: cn(buttonVariants({ color: 'primary', size: 'sm' }), 'px-3 py-1.5 gap-1.5'), onClick: onCopyUrl, children: [copied ? (_jsx(Check, { className: "size-3.5" })) : (_jsx(Copy, { className: "size-3.5" })), copied ? 'Copied' : 'Copy'] })] })] }) }) }));
 }
 function SecurityTabs({ securities, setSecurityId, securityId, children, }) {
     const [open, setOpen] = useState(false);

@@ -42,7 +42,7 @@ export function Operation({ type = 'operation', path, method, ctx, hasHead, head
     }
     if (method.responses && ctx.showResponseSchema !== false) {
         const statuses = Object.keys(method.responses);
-        responseNode = (_jsxs(_Fragment, { children: [heading(headingLevel, 'Response Body', ctx), _jsx(Accordions, { type: "multiple", children: statuses.map((status) => (_jsx(AccordionItem, { value: status, children: _jsx(ResponseAccordion, { status: status, operation: method, ctx: ctx }) }, status))) })] }));
+        responseNode = (_jsxs(_Fragment, { children: [heading(headingLevel, 'Response Body', ctx), _jsx(Accordions, { type: "multiple", defaultValue: statuses.includes('200') ? ['200'] : [], children: statuses.map((status) => (_jsx(AccordionItem, { value: status, children: _jsx(ResponseAccordion, { status: status, operation: method, ctx: ctx }) }, status))) })] }));
     }
     const parameterNode = Object.entries(ParamTypes).map(([type, title]) => {
         const params = method.parameters?.filter((param) => param.in === type);

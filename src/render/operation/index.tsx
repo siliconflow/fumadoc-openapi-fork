@@ -118,12 +118,11 @@ export function Operation({
 
   if (method.responses && ctx.showResponseSchema !== false) {
     const statuses = Object.keys(method.responses);
-
     responseNode = (
       <>
         {heading(headingLevel, 'Response Body', ctx)}
 
-        <Accordions type="multiple">
+        <Accordions type="multiple" defaultValue={statuses.includes('200') ? ['200'] : []} >
           {statuses.map((status) => (
             <AccordionItem key={status} value={status}>
               <ResponseAccordion status={status} operation={method} ctx={ctx} />
