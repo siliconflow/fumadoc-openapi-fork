@@ -133,6 +133,18 @@ export function Operation({
     );
   }
 
+  const responseHeaderNode = Object.entries(method.responses ?? {})
+    .flatMap(([status, response]) => {
+      const headers = response?.headers;
+      if (!headers) return [];
+
+      return Object.entries(headers).map(([name, header]) => ({
+        status,
+        name,
+        header,
+      }));
+    });
+
   const parameterNode = Object.entries(ParamTypes).map(([type, title]) => {
     const params = method.parameters?.filter((param) => param.in === type);
     if (!params || params.length === 0) return;
@@ -164,6 +176,76 @@ export function Operation({
       </Fragment>
     );
   });
+
+  // Response Headers(responses.<code>.headers):按状态码分组,
+  // 外层结构与 bodyNode 的 media-type SelectTabs 对齐;
+  // 条目样式与 Header Parameters 完全一致(同 Schema 渲染管道)
+  const responseHeaderStatuses = Array.from(
+    new Set(responseHeaderNode.map((item) => item.status)),
+  );
+  const responseHeaderNodeRendered =
+    responseHeaderNode.length > 0 ? (
+      <Fragment>
+        {heading(headingLevel, 'Response Headers', ctx)}
+        <SelectTabs defaultValue={responseHeaderStatuses[0]}>
+          <div className="flex items-end justify-between gap-2">
+            <span />
+            {responseHeaderStatuses.length > 1 && (
+              <SelectTabTrigger
+                items={responseHeaderStatuses}
+                className="mb-4"
+              />
+            )}
+          </div>
+          {responseHeaderStatuses.map((status) => {
+            const items = responseHeaderNode.filter(
+              (item) => item.status === status,
+            );
+
+            return (
+              <SelectTab key={status} value={status}>
+                <div className="flex flex-col">
+                  {items.map(({ name, header }) => {
+                    const headerObject = header as {
+                      description?: string;
+                      schema?: object;
+                      deprecated?: boolean;
+                    };
+
+                    return (
+                      <Schema
+                        key={name}
+                        name={name}
+                        schema={
+                          {
+                            ...(headerObject.schema ?? { type: 'string' }),
+                            description:
+                              headerObject.description ??
+                              (headerObject.schema as
+                                | { description?: string }
+                                | undefined)?.description,
+                            deprecated:
+                              (headerObject.deprecated ?? false) ||
+                              ((headerObject.schema as
+                                | { deprecated?: boolean }
+                                | undefined)?.deprecated ??
+                                false),
+                          } as ResolvedSchema
+                        }
+                        required={false}
+                        readOnly={method.method === 'GET'}
+                        writeOnly={method.method !== 'GET'}
+                        ctx={ctx}
+                      />
+                    );
+                  })}
+                </div>
+              </SelectTab>
+            );
+          })}
+        </SelectTabs>
+      </Fragment>
+    ) : null;
 
   const securities = (
     method.security ??
@@ -246,6 +328,7 @@ export function Operation({
       {authNode}
       {parameterNode}
       {bodyNode}
+      {responseHeaderNodeRendered}
       {responseNode}
       {callbacksNode}
     </ctx.renderer.APIInfo>
