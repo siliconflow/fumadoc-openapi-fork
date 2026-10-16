@@ -70,7 +70,7 @@ export function Operation({ type = 'operation', path, method, ctx, hasHead, head
     // 外层结构与 bodyNode 的 media-type SelectTabs 对齐;
     // 条目样式与 Header Parameters 完全一致(同 Schema 渲染管道)
     const responseHeaderStatuses = Array.from(new Set(responseHeaderNode.map((item) => item.status)));
-    const responseHeaderNodeRendered = responseHeaderNode.length > 0 ? (_jsxs(Fragment, { children: [heading(headingLevel, 'Response Headers', ctx), _jsxs(SelectTabs, { defaultValue: responseHeaderStatuses[0], children: [_jsxs("div", { className: "flex items-end justify-between gap-2", children: [_jsx("span", {}), responseHeaderStatuses.length > 1 && (_jsx(SelectTabTrigger, { items: responseHeaderStatuses, className: "mb-4" }))] }), responseHeaderStatuses.map((status) => {
+    const responseHeaderNodeRendered = responseHeaderNode.length > 0 ? (_jsxs(Fragment, { children: [heading(headingLevel, 'Response Headers', ctx), _jsxs(SelectTabs, { defaultValue: responseHeaderStatuses[0], children: [_jsxs("div", { className: "flex items-end justify-between gap-2", children: [_jsx("span", {}), _jsx(SelectTabTrigger, { items: responseHeaderStatuses, className: "mb-4" })] }), responseHeaderStatuses.map((status) => {
                         const items = responseHeaderNode.filter((item) => item.status === status);
                         return (_jsx(SelectTab, { value: status, children: _jsx("div", { className: "flex flex-col", children: items.map(({ name, header }) => {
                                     const headerObject = header;

@@ -190,12 +190,10 @@ export function Operation({
         <SelectTabs defaultValue={responseHeaderStatuses[0]}>
           <div className="flex items-end justify-between gap-2">
             <span />
-            {responseHeaderStatuses.length > 1 && (
-              <SelectTabTrigger
-                items={responseHeaderStatuses}
-                className="mb-4"
-              />
-            )}
+            <SelectTabTrigger
+              items={responseHeaderStatuses}
+              className="mb-4"
+            />
           </div>
           {responseHeaderStatuses.map((status) => {
             const items = responseHeaderNode.filter(
