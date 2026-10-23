@@ -44,6 +44,17 @@ export function Operation({ type = 'operation', path, method, ctx, hasHead, head
         const statuses = Object.keys(method.responses);
         responseNode = (_jsxs(_Fragment, { children: [heading(headingLevel, 'Response Body', ctx), _jsx(Accordions, { type: "multiple", defaultValue: statuses.includes('200') ? ['200'] : [], children: statuses.map((status) => (_jsx(AccordionItem, { value: status, children: _jsx(ResponseAccordion, { status: status, operation: method, ctx: ctx }) }, status))) })] }));
     }
+    const responseHeaderNode = Object.entries(method.responses ?? {})
+        .flatMap(([status, response]) => {
+        const headers = response?.headers;
+        if (!headers)
+            return [];
+        return Object.entries(headers).map(([name, header]) => ({
+            status,
+            name,
+            header,
+        }));
+    });
     const parameterNode = Object.entries(ParamTypes).map(([type, title]) => {
         const params = method.parameters?.filter((param) => param.in === type);
         if (!params || params.length === 0)
@@ -55,6 +66,24 @@ export function Operation({ type = 'operation', path, method, ctx, hasHead, head
                                 (param.schema?.deprecated ?? false),
                         }, required: param.required, readOnly: method.method === 'GET', writeOnly: method.method !== 'GET', ctx: ctx }, param.name))) })] }, type));
     });
+    // Response Headers(responses.<code>.headers):按状态码分组,
+    // 外层结构与 bodyNode 的 media-type SelectTabs 对齐;
+    // 条目样式与 Header Parameters 完全一致(同 Schema 渲染管道)
+    const responseHeaderStatuses = Array.from(new Set(responseHeaderNode.map((item) => item.status)));
+    const responseHeaderNodeRendered = responseHeaderNode.length > 0 ? (_jsxs(Fragment, { children: [heading(headingLevel, 'Response Headers', ctx), _jsxs(SelectTabs, { defaultValue: responseHeaderStatuses[0], children: [_jsxs("div", { className: "flex items-end justify-between gap-2", children: [_jsx("span", {}), _jsx(SelectTabTrigger, { items: responseHeaderStatuses, className: "mb-4" })] }), responseHeaderStatuses.map((status) => {
+                        const items = responseHeaderNode.filter((item) => item.status === status);
+                        return (_jsx(SelectTab, { value: status, children: _jsx("div", { className: "flex flex-col", children: items.map(({ name, header }) => {
+                                    const headerObject = header;
+                                    return (_jsx(Schema, { name: name, schema: {
+                                            ...(headerObject.schema ?? { type: 'string' }),
+                                            description: headerObject.description ??
+                                                headerObject.schema?.description,
+                                            deprecated: (headerObject.deprecated ?? false) ||
+                                                (headerObject.schema?.deprecated ??
+                                                    false),
+                                        }, required: false, readOnly: method.method === 'GET', writeOnly: method.method !== 'GET', ctx: ctx }, name));
+                                }) }) }, status));
+                    })] })] })) : null;
     const securities = (method.security ??
         ctx.schema.document.security ??
         []).filter((v) => Object.keys(v).length > 0);
@@ -72,7 +101,7 @@ export function Operation({ type = 'operation', path, method, ctx, hasHead, head
         const callbacks = Object.entries(method.callbacks);
         callbacksNode = (_jsxs(SelectTabs, { defaultValue: callbacks[0][0], children: [_jsxs("div", { className: "flex justify-between gap-2 items-end", children: [heading(headingLevel, 'Callbacks', ctx), _jsx(SelectTabTrigger, { items: callbacks.map((v) => v[0]), className: "mb-4" })] }), callbacks.map(([name, callback]) => (_jsx(SelectTab, { value: name, children: _jsx(WebhookCallback, { callback: callback, ctx: ctx, headingLevel: headingLevel }) }, name)))] }));
     }
-    const info = (_jsxs(ctx.renderer.APIInfo, { head: headNode, method: method.method, route: path, children: [type === 'operation' ? (ctx.disablePlayground ? (_jsxs("div", { className: "flex flex-row items-center gap-2.5 p-3 rounded-xl border bg-fd-card text-fd-card-foreground not-prose", children: [_jsx(MethodLabel, { className: "text-xs", children: method.method }), _jsx("code", { className: "flex-1 overflow-auto text-nowrap text-[13px] text-fd-muted-foreground", children: path })] })) : (_jsx(ctx.renderer.APIPlayground, { path: path, method: method, ctx: ctx }))) : null, authNode, parameterNode, bodyNode, responseNode, callbacksNode] }));
+    const info = (_jsxs(ctx.renderer.APIInfo, { head: headNode, method: method.method, route: path, children: [type === 'operation' ? (ctx.disablePlayground ? (_jsxs("div", { className: "flex flex-row items-center gap-2.5 p-3 rounded-xl border bg-fd-card text-fd-card-foreground not-prose", children: [_jsx(MethodLabel, { className: "text-xs", children: method.method }), _jsx("code", { className: "flex-1 overflow-auto text-nowrap text-[13px] text-fd-muted-foreground", children: path })] })) : (_jsx(ctx.renderer.APIPlayground, { path: path, method: method, ctx: ctx }))) : null, authNode, parameterNode, bodyNode, responseHeaderNodeRendered, responseNode, callbacksNode] }));
     if (type === 'operation') {
         const examples = getAPIExamples(path, method, ctx);
         return (_jsx(ctx.renderer.API, { children: _jsxs(APIExampleProvider, { route: path, examples: examples, method: method, children: [info, _jsx(APIExample, { examples: examples, method: method, ctx: ctx })] }) }));
