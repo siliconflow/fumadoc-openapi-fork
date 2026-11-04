@@ -1,13 +1,13 @@
 {
-  "name": "sf-openapi-docs",
-  "version": "9.0.12",
+  "name": "@siliconflow-fork/openapi-docs",
+  "version": "9.0.13",
   "description": "Generate MDX docs for your OpenAPI spec",
   "keywords": [
     "NextJs",
     "Docs"
   ],
   "homepage": "https://fumadocs.vercel.app",
-  "repository": "wyuanhpp/sf-repo-name",
+  "repository": "https://github.com/siliconflow/fumadoc-openapi-fork",
   "license": "MIT",
   "author": "Fuma Nama",
   "type": "module",
@@ -104,6 +104,6 @@
     }
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.siliconflow.cn"
   }
 }
